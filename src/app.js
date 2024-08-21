@@ -1,43 +1,81 @@
 const express = require('express')
-const data = require('./data/data.js')
+const db = require('./models/index.js')
 
 const app = express()
 app.use(express.json())
 
-app.get('/api/users', (req, res) => {
+app.get('/api/users', async (req, res) => {
+  const list = await db.User.findAll()
   res.status(200).send({
     message: 'list users',
-    users: data
+    users: list
   })
 })
 
-app.post('/api/users', (req, res) => {
-  const newUser = data.push(req.body)
+app.get('/api/users/:id', async (req, res) => {
+  const id = Number(req.params.id)
+  const user = await db.User.findByPk(id)
+
+  if(user === null){
+    res.status(404).send({
+      message: 'User not found'
+    })
+  }
+
+  res.status(200).send({
+    message: 'user',
+    users: user
+  })
+})
+
+app.post('/api/users', async (req, res) => {
+  const newUser = await db.User.create(req.body)
   res.status(201).send({
     message: 'new user created',
     user: newUser
   })
 })
 
-app.put('/api/users/:id', (req, res) => {
+app.put('/api/users/:id', async(req, res) => {
   const id = Number(req.params.id)
-  const index = data.findIndex(user => user.id === id)
-  data[index] = {...data[index], ...req.body}
 
-  res.send({
-    message: 'user found',
-    user: data[index]
+  await db.User.update(req.body, {
+    where: { id: id }       
+  })
+  // verificando se o ID existe
+  const isUser = await db.User.findByPk(id)
+
+  if(isUser === null) {
+    res.send({
+      message: 'userId not found'
+    })
+  }
+
+  const userUpdated = await db.User.findAll({
+    where: { id:id },
+    attributes: ['name', 'email', 'password', 'date_of_birth']
+  })
+
+  res.status(200).send({
+    message: 'user updated successfully',
+    userUpdated: userUpdated,
   })
 })
 
-app.delete('/api/users/:id', (req, res) => {
+app.delete('/api/users/:id', async (req, res) => {
   const id = Number(req.params.id)
-  const index = data.findIndex(user => user.id === id)
-  const userDeleted = data.splice(index, 1)
+  const userDeleted = await db.User.destroy({
+    where: { id:id },
+  })
+
+  if (userDeleted === null){
+    res.status(400).send({
+      message: 'User not found'
+    })
+  }
 
   res.status(200).send({
-    message: 'user deleted',
-    user: userDeleted
+    message: 'user deleted'
   })
 })
 
