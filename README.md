@@ -74,7 +74,7 @@ O projeto segue a arquitetura MVC
 
    ```bash
     git clone https://github.com/seu-usuario/seu-repositorio.git
-    cd seu-repositorio
+    cd https://github.com/rhyanmiranda/gerenciador-usuarios.git
 2. **Instale as dependencies**:
    ```bash
     npm install
