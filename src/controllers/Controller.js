@@ -13,42 +13,42 @@ class Controller {
 
   async getById(req, res){
     const id = req.params.id
-    const user = await this.servicesName.getById(id)
+    const registerById = await this.servicesName.getById(id)
 
-    if(user === null) {
+    if(registerById === null) {
       res.status(404).send({
         message: 'User not found'
       })
     }
 
-
     res.status(200).send({
-      message: 'user by id',
-      user: user
+      message: 'list by id',
+      registerById: registerById
     })
   }
 
   async create(req, res){
     const data = req.body
-    const createdUser = await this.servicesName.create(data)
+    const created = await this.servicesName.create(data)
     res.status(201).send({
-      message: 'user created',
-      newUser: createdUser
+      message: 'new register created',
+      new: created
     })
   }
 
   async update(req, res){
     const id = req.params.id
     const data = req.body
-    const updatedUser = await this.servicesName.update(id, data)
+    const updated = await this.servicesName.update(id, data)
 
-    if(!updatedUser){
+    if(!updated){
       res.status(400).send({
-        message:'Error updating'
+        message:'Error updating',
       })
     }
     res.status(200).send({
-      message: 'updated successfully'
+      message: 'updated successfully',
+      updated: updated
     })
   }
 
@@ -66,7 +66,6 @@ class Controller {
       message: 'Deleted'
     })
   }
-  
 }
 
 module.exports = Controller
