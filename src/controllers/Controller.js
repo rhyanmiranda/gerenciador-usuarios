@@ -6,7 +6,7 @@ class Controller {
   async getAll(req, res){
     const list = await this.servicesName.getAll()
     res.status(200).send({
-      message: 'list users',
+      message: 'list',
       users: list
     })
   }
@@ -17,7 +17,7 @@ class Controller {
 
     if(registerById === null) {
       res.status(404).send({
-        message: 'User not found'
+        message: 'not found'
       })
     }
 
@@ -58,12 +58,12 @@ class Controller {
 
    if (deleted === 0) {
     res.status(404).send({
-      message: 'failed to delete'
+      message: 'Not Found',
     })
    }
 
     res.status(201).send({
-      message: 'Deleted'
+      message: 'Deleted successfully'
     })
   }
 }
