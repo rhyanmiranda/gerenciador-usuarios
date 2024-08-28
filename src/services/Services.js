@@ -1,4 +1,4 @@
-const db = require('../models/index.js')
+const db = require('../database/models/index.js')
 
 class Services {
   constructor(modelName){
@@ -21,9 +21,7 @@ class Services {
     const updated = await db[this.model].update(data, {
       where: { id: id }       
     })
-
     if(updated[0] === null) return false
-    
     return true
   }
 
